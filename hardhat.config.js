@@ -1,22 +1,17 @@
-/**
-* @type import('hardhat/config').HardhatUserConfig
-*/
-
+require("@nomicfoundation/hardhat-toolbox");
 require('dotenv').config();
-require("@nomiclabs/hardhat-ethers");
 
-const { API_URL, PRIVATE_KEY } = process.env;
-
+/** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
-   solidity: "0.8.11",
-   defaultNetwork: "volta",
-   networks: {
-      hardhat: {},
-      volta: {
-         url: API_URL,
-         accounts: [`0x${PRIVATE_KEY}`],
-         gas: 210000000,
-         gasPrice: 800000000000,
-      }
-   },
-}
+  solidity: "0.8.27",
+  defaultNetwork: "volta",
+  networks: {
+    hardhat: {},
+    volta: {
+      url: "https://volta-rpc.energyweb.org",
+   accounts: [`0x$ {process.env.PRIVATE_KEY}`],
+      gas: 2100000,
+      gasPrice: 800000000000,
+    },
+  },
+};

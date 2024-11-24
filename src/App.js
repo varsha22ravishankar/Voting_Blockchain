@@ -12,12 +12,14 @@ function App() {
   const [isConnected, setIsConnected] = useState(false);
   const [votingStatus, setVotingStatus] = useState(true);
   const [remainingTime, setremainingTime] = useState('');
-  const [candidates, setCandidates] = useState([]);
+  const [candidates, setCandidates] = useState([true]);
   const [number, setNumber] = useState('');
-  const [CanVote, setCanVote] = useState(true);
+  const [CanVote, setCanVote] = useState(false);
+  const [addcandidate,setaddCandidates] = useState('');
 
 
   useEffect( () => {
+    addcandidates();
     getCandidates();
     getRemainingTime();
     getCurrentStatus();
@@ -66,7 +68,9 @@ function App() {
       const contractInstance = new ethers.Contract (
         contractAddress, contractAbi, signer
       );
+      console.log("befoe getting candidates list");
       const candidatesList = await contractInstance.getAllVotesOfCandiates();
+      console.log(candidatesList);
       const formattedCandidates = candidatesList.map((candidate, index) => {
         return {
           index: index,
@@ -76,6 +80,17 @@ function App() {
       });
       setCandidates(formattedCandidates);
   }
+  async function addcandidates() {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    const signer = provider.getSigner();
+    const contractInstance = new ethers.Contract (
+      contractAddress, contractAbi, signer
+    );
+    const candidate = await contractInstance.addCandidate("mark");
+    
+    setaddCandidates(candidate);
+}
 
 
   async function getCurrentStatus() {
@@ -86,7 +101,7 @@ function App() {
         contractAddress, contractAbi, signer
       );
       const status = await contractInstance.getVotingStatus();
-      console.log(status);
+      // console.log(status);
       setVotingStatus(status);
   }
 
